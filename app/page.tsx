@@ -319,14 +319,14 @@ function VersionSwitcher({
             <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#ffb733]" />
           </span>
         </span>
-        <span className="flex flex-col leading-tight">
-          <span className="text-xs font-semibold text-[#f0a010] md:text-sm">
-            Participate in the challenge?
+          <span className="flex flex-col leading-tight">
+            <span className="text-xs font-semibold text-[#f0a010] md:text-sm">
+              brainrot a PR →
+            </span>
+            <span className="text-[10px] text-white/55">
+              ▶ now playing: {active.name}
+            </span>
           </span>
-          <span className="text-[10px] text-white/55">
-            ▶ now playing: {active.name}
-          </span>
-        </span>
       </button>
 
       {open && (
@@ -432,16 +432,6 @@ export default function Home() {
             phase === "splash" ? "scale-[1.03] opacity-0" : "scale-100 opacity-100"
           }`}
         >
-          {/* coming soon + banner handling — no stretch */}
-          <Image
-            src="/assets/banner.png"
-            alt="FOSS SRMAP"
-            width={1200}
-            height={400}
-            priority
-            className="mb-5 h-auto max-h-20 w-auto max-w-[280px] object-contain md:max-h-24 md:max-w-sm"
-          />
-
           <Image
             src="/assets/foss-logo.png"
             alt="FOSS SRMAP"
@@ -468,22 +458,6 @@ export default function Home() {
 
           {/* FOSS links */}
           <nav className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-white/70 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            <Link href="/speakers" className="font-medium transition-colors hover:text-[#f0a010]">
-              Speakers
-            </Link>
-            <span className="text-white/25">·</span>
-            <Link href="/sponsors" className="font-medium transition-colors hover:text-[#f0a010]">
-              Sponsors
-            </Link>
-            <span className="text-white/25">·</span>
-            <Link href="/partners" className="font-medium transition-colors hover:text-[#f0a010]">
-              Partners
-            </Link>
-            <span className="text-white/25">·</span>
-            <Link href="/poap" className="font-medium transition-colors hover:text-[#f0a010]">
-              POAP
-            </Link>
-            <span className="text-white/25">·</span>
             <a
               href="https://fossunited.org/c/srm-university-ap"
               target="_blank"
