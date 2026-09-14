@@ -391,13 +391,15 @@ function VersionSwitcher({
 }
 
 export default function Home() {
-  // Strip extension-injected attrs (bis_skin_checked etc.) before hydration mismatch overlay fires
+  // Strip extension-injected attrs (bis_skin_checked etc.) before hydration overlay fires
   useEffect(() => {
     const strip = () => {
       document.querySelectorAll("[bis_skin_checked]").forEach((el) => el.removeAttribute("bis_skin_checked"));
       document.querySelectorAll("[bis_register]").forEach((el) => el.removeAttribute("bis_register"));
-      document.querySelectorAll("[__processed_\\w+]").forEach((el) => {
-        [...el.attributes].forEach((a) => { if (a.name.startsWith("__processed")) el.removeAttribute(a.name); });
+      document.querySelectorAll("*").forEach((el) => {
+        [...el.attributes].forEach((a) => {
+          if (a.name.startsWith("__processed")) el.removeAttribute(a.name);
+        });
       });
     };
     strip();
