@@ -36,15 +36,15 @@ function TimeWasted({ since }: { since: number | null }) {
   ];
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div suppressHydrationWarning className="flex flex-col items-center gap-2">
       <p className="text-[7px] uppercase tracking-[0.3em] text-white/45 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
         time you&apos;ve wasted here
       </p>
-      <div className="flex flex-wrap justify-center gap-1.5 md:gap-2">
+      <div suppressHydrationWarning className="flex flex-wrap justify-center gap-1.5 md:gap-2">
         {units.map(({ label, value }) => (
           <div
             key={label}
-            className="flex min-w-[52px] flex-col items-center rounded-lg border border-white/15 bg-white/10 px-3 py-1.5 backdrop-blur-md"
+            suppressHydrationWarning className="flex min-w-[52px] flex-col items-center rounded-lg border border-white/15 bg-white/10 px-3 py-1.5 backdrop-blur-md"
           >
             <span className="text-xl font-bold tabular-nums drop-shadow md:text-2xl">
               {String(value).padStart(2, "0")}
@@ -202,7 +202,7 @@ function SiteAudio({
 
       {phase !== "home" && (
         <div
-          className={`fixed inset-0 z-[10000] flex select-none flex-col items-center justify-center overflow-hidden bg-black px-6 text-center transition-opacity duration-[4000ms] ease-[cubic-bezier(0.65,0,0.35,1)] ${
+          suppressHydrationWarning className={`fixed inset-0 z-[10000] flex select-none flex-col items-center justify-center overflow-hidden bg-black px-6 text-center transition-opacity duration-[4000ms] ease-[cubic-bezier(0.65,0,0.35,1)] ${
             leaving ? "pointer-events-none opacity-0" : "opacity-100"
           }`}
         >
@@ -217,7 +217,7 @@ function SiteAudio({
           />
 
           <div
-            className={`relative z-10 mx-auto flex max-w-md flex-col items-center gap-7 transition-opacity duration-500 ease-out ${
+            suppressHydrationWarning className={`relative z-10 mx-auto flex max-w-md flex-col items-center gap-7 transition-opacity duration-500 ease-out ${
               leaving ? "opacity-0" : "opacity-100"
             }`}
           >
@@ -391,6 +391,21 @@ function VersionSwitcher({
 }
 
 export default function Home() {
+  // Strip extension-injected attrs (bis_skin_checked etc.) before hydration mismatch overlay fires
+  useEffect(() => {
+    const strip = () => {
+      document.querySelectorAll("[bis_skin_checked]").forEach((el) => el.removeAttribute("bis_skin_checked"));
+      document.querySelectorAll("[bis_register]").forEach((el) => el.removeAttribute("bis_register"));
+      document.querySelectorAll("[__processed_\\w+]").forEach((el) => {
+        [...el.attributes].forEach((a) => { if (a.name.startsWith("__processed")) el.removeAttribute(a.name); });
+      });
+    };
+    strip();
+    const obs = new MutationObserver(strip);
+    obs.observe(document.documentElement, { attributes: true, subtree: true, attributeFilter: ["bis_skin_checked", "bis_register"] });
+    return () => obs.disconnect();
+  }, []);
+
   const [phase, setPhase] = useState<Phase>("splash");
   const [enteredAt, setEnteredAt] = useState<number | null>(null);
   const [versionId, setVersionId] = useState(DEFAULT_VERSION_ID);
@@ -406,7 +421,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black font-sans text-white">
+    <main suppressHydrationWarning className="relative min-h-screen overflow-hidden bg-black font-sans text-white">
       <SiteAudio
         phase={phase}
         onEnter={handleEnter}
@@ -424,11 +439,11 @@ export default function Home() {
           playsInline
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/75" />
+        <div suppressHydrationWarning className="absolute inset-0 bg-black/30" />
+        <div suppressHydrationWarning className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/75" />
 
         <div
-          className={`relative z-10 mx-auto flex max-w-3xl flex-col items-center transition-all duration-[1500ms] ease-out ${
+          suppressHydrationWarning className={`relative z-10 mx-auto flex max-w-3xl flex-col items-center transition-all duration-[1500ms] ease-out ${
             phase === "splash" ? "scale-[1.03] opacity-0" : "scale-100 opacity-100"
           }`}
         >
@@ -445,12 +460,12 @@ export default function Home() {
             The free and open source community at SRM University AP.
           </p>
 
-          <div className="mt-9">
+          <div suppressHydrationWarning className="mt-9">
             <TimeWasted since={enteredAt} />
           </div>
 
           {/* Placeholder Registration — wire later */}
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
+          <div suppressHydrationWarning className="mt-10 flex flex-wrap justify-center gap-4">
             <span className="rounded-full border border-[#f0a010]/40 bg-[#f0a010]/10 px-6 py-3 text-base font-semibold text-[#f0a010] backdrop-blur-sm">
               Registration — coming soon
             </span>
